@@ -1,0 +1,10 @@
+# Send entries to logentries via TCP.
+$DefaultNetstreamDriverCAFile /etc/ssl/certs/logentries.all.crt
+
+$ActionSendStreamDriver gtls
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode x509/name
+$ActionSendStreamDriverPermittedPeer *.logentries.com
+
+$template LogentriesFormat,"<%= @token %> %HOSTNAME% %syslogtag%%msg%\n"
+*.* @@api.logentries.com:20000;LogentriesFormat
