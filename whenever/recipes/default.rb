@@ -13,6 +13,6 @@ node[:deploy].each do |application, deploy|
   bash 'update-crontab' do
     cwd "#{deploy[:deploy_to]}/current"
     user 'deploy'
-    code "bundle list | grep whenever && bundle exec whenever --set environment=#{deploy[:rails_env]} --update-crontab #{application}"
+    code "bundle show whenever && bundle exec whenever --set environment=#{deploy[:rails_env]} --update-crontab #{application}"
   end
 end
