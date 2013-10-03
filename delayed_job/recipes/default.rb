@@ -25,6 +25,7 @@ node[:deploy].each do |application, deploy|
       :group => deploy[:group],
       :timeout => node[:delayed_job][:timeout]
     )
+    only_if "cd #{deploy[:deploy_to]}/current && bundle show delayed_job"
   end
 
   bash 'monit-reload' do

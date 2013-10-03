@@ -8,9 +8,12 @@
 #
 
 node[:deploy].each do |application, deploy|
+  deploy = node[:deploy][application]
+
   bash 'delayed-job-restart' do
     user 'root'
     code "monit restart #{application}_delayed_job"
+    only_if "cd #{deploy[:deploy_to]}/current && bundle show delayed_job"
   end
 end
 
