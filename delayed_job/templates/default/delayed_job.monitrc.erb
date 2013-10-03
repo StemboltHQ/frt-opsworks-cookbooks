@@ -1,4 +1,4 @@
-check process delayed_job with pidfile <%= @dir %>/shared/pids/delayed_job.pid
+check process <%= @app %>_delayed_job with pidfile <%= @dir %>/shared/pids/delayed_job.pid
   start program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/delayed_job start'"
     as uid <%= @user %> and gid <%= @group %> with timeout <%= @timeout %> seconds
   stop program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/delayed_job stop'"

@@ -7,8 +7,10 @@
 # All rights reserved - Do Not Redistribute
 #
 
-bash 'delayed-job-restart' do
-  user 'root'
-  code 'monit restart delayed_job'
+node[:deploy].each do |application, deploy|
+  bash 'delayed-job-restart' do
+    user 'root'
+    code "monit restart #{application}_delayed_job"
+  end
 end
 

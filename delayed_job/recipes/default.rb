@@ -12,12 +12,13 @@ include_recipe 'deploy'
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
 
-  template '/etc/monit.d/delayed_job.monitrc' do
+  template "/etc/monit.d/#{application}_delayed_job.monitrc" do
     source 'delayed_job.monitrc.erb'
     owner 'root'
     group 'root'
     mode '0755'
     variables(
+      :app => application,
       :env => deploy[:rails_env],
       :dir => deploy[:deploy_to],
       :user => deploy[:user],
