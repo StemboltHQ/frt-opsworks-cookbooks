@@ -27,9 +27,9 @@ node[:deploy].each do |application, deploy|
     )
     only_if "cd #{deploy[:deploy_to]}/current && bundle show delayed_job"
   end
+end
 
-  bash 'monit-reload' do
-    user 'root'
-    code 'monit reload'
-  end
+bash 'monit-reload' do
+  user 'root'
+  code 'monit reload && monit validate'
 end
