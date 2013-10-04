@@ -13,7 +13,7 @@ node[:deploy].each do |application, deploy|
   bash 'delayed-job-restart' do
     user 'root'
     code "monit restart #{application}_delayed_job"
-    only_if "sudo monit summary | grep #{application}_delayed_job"
+    only_if { deploy[:delayed_job] }
   end
 end
 
