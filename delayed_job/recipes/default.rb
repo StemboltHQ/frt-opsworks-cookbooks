@@ -31,5 +31,5 @@ end
 
 bash 'monit-reload' do
   user 'root'
-  code 'monit reload && monit validate'
+  code 'monit reload'
 end
