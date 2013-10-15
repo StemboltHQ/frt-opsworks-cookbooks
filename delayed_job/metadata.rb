@@ -5,3 +5,4 @@ license          'All rights reserved'
 description      'Configures delayed_job for use with monit'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.1'
+depends          'deploy'
