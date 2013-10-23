@@ -20,12 +20,9 @@ node[:deploy].each do |application, deploy|
     variables(:deploy => deploy, :application => application)
   end
 
-  service "faye_#{application}" do
-    start_command   "#{deploy[:deploy_to]}/shared/scripts/faye start"
-    stop_command    "#{deploy[:deploy_to]}/shared/scripts/faye stop"
-    restart_command "#{deploy[:deploy_to]}/shared/scripts/faye restart"
-    status_command  "#{deploy[:deploy_to]}/shared/scripts/faye status"
-    action :restart
+  bash "faye-restart-#{application}" do
+    user deploy[:user]
+    code "#{deploy[:deploy_to]}/shared/scripts/faye restart"
   end
 end
 
