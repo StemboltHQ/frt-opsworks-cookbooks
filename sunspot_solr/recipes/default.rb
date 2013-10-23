@@ -11,6 +11,14 @@ include_recipe 'deploy'
 
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
+  data_dir = "/mnt/#{application}_solr"
+
+  directory data_dir do
+    user deploy[:user]
+    group deploy[:group]
+    action :create
+    mode "0755"
+  end
 
   template "/etc/monit.d/#{application}_sunspot_solr.monitrc" do
     source 'sunspot_solr.monitrc.erb'
@@ -23,7 +31,7 @@ node[:deploy].each do |application, deploy|
       :dir => deploy[:deploy_to],
       :user => deploy[:user],
       :group => deploy[:group],
-      :data_dir => node[:solr][:data_dir]
+      :data_dir => data_dir
     )
   end
 end

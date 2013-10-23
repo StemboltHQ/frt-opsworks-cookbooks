@@ -1,5 +1,5 @@
 check process <%= @app %>_sunspot_solr with pidfile <%= @dir %>/shared/pids/sunspot-solr.pid
-  start program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> bundle exec rake sunspot-solr start --data-directory=<%= @data_dir %> --pid-dir=<%= @dir %>/shared/pids
+  start program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> bundle exec sunspot-solr start --data-directory=<%= @data_dir %> --pid-dir=<%= @dir %>/shared/pids'"
     as uid <%= @user %> and gid <%= @group %> with timeout <%= @timeout %> seconds
-  stop program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> bundle exec rake sunspot-solr stop --data-directory=<%= @data_dir %> --pid-dir=<%= @dir %>/shared/pids
+  stop program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> bundle exec sunspot-solr stop --data-directory=<%= @data_dir %> --pid-dir=<%= @dir %>/shared/pids'"
     as uid <%= @user %> and gid <%= @group %> with timeout <%= @timeout %> seconds
