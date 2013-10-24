@@ -34,16 +34,23 @@ defaults
   stats auth <%= node[:haproxy][:stats_user] %>:<%= node[:haproxy][:stats_password] %>
   stats uri <%= node[:haproxy][:stats_url] %>
   <% end -%>
-        
-# Set up application listeners here.
-<% if node[:haproxy][:rails_backends].blank? && node[:haproxy][:php_backends].blank? && node[:haproxy][:nodejs_backends].blank? && node[:haproxy][:static_backends].blank? -%>
-listen application 0.0.0.0:80
-  # configure a fake backend as long as there are no real ones
-  # this way HAProxy will not fail on a config check
-  balance <%= node[:haproxy][:balance] %>
-  server localhost 127.0.0.1:8080 weight 1 maxconn 5 check
-<% else -%>
 
+
+# Set up application listeners here.
+listen admin 0.0.0.0:22003
+  mode http
+  stats uri /
+
+<% if !node[:outbound_proxy].empty? %>
+<% node[:outbound_proxy].each do |name, proxy| %>
+listen <%= name %> <%= proxy[:local_address] %>:<%= proxy[:local_port] %>
+  mode tcp
+  server <%= proxy[:remote_address] %> <%= proxy[:remote_address] %>:<%= proxy[:remote_port] %> weight 1 maxconn 30
+<% end %>
+<% end %>
+
+<% if node[:haproxy][:rails_backends].blank? && node[:haproxy][:php_backends].blank? && node[:haproxy][:nodejs_backends].blank? && node[:haproxy][:static_backends].blank? -%>
+<% else -%>
 <% if !node[:haproxy][:rails_backends].empty? -%>
 backend rails_app_servers
   balance <%= node[:haproxy][:balance] %>
