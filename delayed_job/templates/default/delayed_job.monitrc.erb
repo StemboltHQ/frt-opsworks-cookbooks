@@ -1,5 +1,7 @@
-check process <%= @app %>_delayed_job with pidfile <%= @dir %>/shared/pids/delayed_job.pid
-  start program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/delayed_job start'"
-    as uid <%= @user %> and gid <%= @group %> with timeout <%= @timeout %> seconds
-  stop program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/delayed_job stop'"
-    as uid <%= @user %> and gid <%= @group %> with timeout <%= @timeout %> seconds
+<% @workers.each do |worker| %>
+check process <%= @app %>_delayed_job<%= worker[:suffix] %> with pidfile <%= @dir %>/shared/pids/delayed_job<%= worker[:suffix] %>.pid
+  start program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/<%= worker[:bin] %> start --identifier='<%= worker[:identifier] %>' <%= worker[:options] %>'"
+    as uid <%= @user %> and gid <%= @group %> with timeout <%= worker[:timeout] %> seconds
+  stop program = "/bin/sh -c 'cd <%= @dir %>/current; /usr/bin/env PATH=/usr/local/bin:$PATH RAILS_ENV=<%= @env %> <%= @dir %>/current/<%= worker[:bin] %> stop --identifier='<%= worker[:identifier] %>''"
+    as uid <%= @user %> and gid <%= @group %> with timeout <%= worker[:timeout] %> seconds
+<% end %>
