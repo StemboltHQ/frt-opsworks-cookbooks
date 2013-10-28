@@ -12,17 +12,15 @@ include_recipe 'deploy'
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
 
-  template "#{deploy[:deploy_to]}/shared/scripts/faye" do
-    mode '0755'
-    owner deploy[:user]
-    group deploy[:group]
-    source "faye.service.erb"
-    variables(:deploy => deploy, :application => application)
-  end
-
-  bash "faye-restart-#{application}" do
+  bash "faye-start-#{application}" do
     user deploy[:user]
-    code "#{deploy[:deploy_to]}/shared/scripts/faye restart"
+    cwd "#{deploy[:deploy_to]}/current"
+
+    # thin will error if faye is already running
+    ignore_failure true
+
+    # Faye runs in production. even not in production
+    code "bundle exec thin start -d -l log/faye.log -P tmp/pids/faye.pid -R faye.ru -e production --tag faye"
   end
 end
 
