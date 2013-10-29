@@ -15,6 +15,9 @@ server {
     client_max_body_size <%= @application[:nginx][:client_max_body_size] %>;
   <% end %>
 
+  # Custom application settings
+  include <%= @application[:deploy_to] %>/current/config/nginx/*.conf;
+
   location ~* \.(eot|ttf|woff)$ {
     gzip_static on;
     expires     max;
