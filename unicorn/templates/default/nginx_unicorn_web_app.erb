@@ -25,7 +25,13 @@ server {
     add_header Access-Control-Allow-Origin *;
   }
 
-  location ~* ^/(assets|images)/ {
+  location ~* ^/assets/ {
+    gzip_static on;
+    expires     max;
+    add_header  Cache-Control public;
+  }
+
+  location ~* ^/images/.*\.(jpg|jpeg|png|gif|ico)$ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
