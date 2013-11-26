@@ -18,7 +18,7 @@ server {
   # Custom application settings
   include <%= @application[:deploy_to] %>/current/config/nginx/*.conf;
 
-  location ~* \.(eot|ttf|woff)$ {
+  location ~* \.(eot|ttf|woff|ico)$ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
