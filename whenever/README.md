@@ -4,7 +4,7 @@ Configures whenever to update crontab.
 
 Requirements
 ------------
-None
+In order for cron to know how to find ruby, you need to provide it with the path environment variable. You can do so by including `env :path, ENV['PATH']` in your `schedule.rb` file.
 
 Usage
 -----
