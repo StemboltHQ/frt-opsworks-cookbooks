@@ -9,5 +9,5 @@
 
 bash 'install-optipng-and-pngcrush' do
   user 'root'
-  code 'yum install -y optipng pngcrush'
+  code 'yum install -y optipng pngcrush pngquant'
 end
