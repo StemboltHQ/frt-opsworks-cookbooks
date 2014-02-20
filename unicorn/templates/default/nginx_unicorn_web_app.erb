@@ -18,6 +18,10 @@ server {
   # Custom application settings
   include <%= @application[:deploy_to] %>/current/config/nginx/*.conf;
 
+  if ($request_uri ~ " ") {
+    return 444;
+  }
+
   location ~* \.(eot|ttf|woff|ico)$ {
     gzip_static on;
     expires     max;
@@ -90,6 +94,10 @@ server {
   <% if @application[:nginx] && @application[:nginx][:client_max_body_size] %>
     client_max_body_size <%= @application[:nginx][:client_max_body_size] %>;
   <% end %>
+
+  if ($request_uri ~ " ") {
+    return 444;
+  }
 
   location ~* ^/assets/ {
     gzip_static on;
