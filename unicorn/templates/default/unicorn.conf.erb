@@ -24,7 +24,7 @@ before_exec do |server|
   ENV['BUNDLE_GEMFILE'] = "<%= @deploy[:deploy_to]%>/current/Gemfile"
 
   # Reload ENV variables.
-  if defined?(Dotenv)
+  if defined?(Dotenv) && Dotenv.respond_to?(:overload)
     Dotenv.overload ".env.<%= @deploy[:rails_env] %>", ".env"
   end
 end
