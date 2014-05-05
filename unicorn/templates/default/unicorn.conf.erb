@@ -29,7 +29,32 @@ before_exec do |server|
   end
 end
 
+# before_fork may be run multiple times, we only want to perform
+# warming/preloading the first time, before the activerecord connection is
+# disconnected.
+initialized = false
+
 before_fork do |server, worker|
+  # Based on samsaffron's optimizations of discourse's startup
+  # https://github.com/discourse/discourse/blob/master/config/unicorn.conf.rb
+  unless initialized
+    initialized = true
+
+    # Preload locales
+    I18n.t('foobar')
+
+    # Warm models, load schema
+    (ActiveRecord::Base.connection.tables - %w[schema_migrations]).each do |table|
+      table.classify.constantize.first rescue nil
+    end
+
+    # Warm the router
+    Rails.application.routes.recognize_path('abc') rescue nil
+
+    # Run GC
+    GC.start
+  end
+
   # the following is highly recomended for Rails + "preload_app true"
   # as there's no need for the master process to hold a connection
   if defined?(ActiveRecord::Base)
