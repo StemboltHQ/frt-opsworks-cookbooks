@@ -29,7 +29,7 @@ server {
     add_header Access-Control-Allow-Origin *;
   }
 
-  location ~* ^/assets/ {
+  location ~* ^/(assets|static)/ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
@@ -53,6 +53,10 @@ server {
     }
     <% end %>
 
+    if (-f $document_root/offline) {
+      return 503;
+    }
+
     # If you don't find the filename in the static files
     # Then request it from the unicorn server
     if (!-f $request_filename) {
@@ -68,9 +72,14 @@ server {
     deny all;
   }
 
-  error_page 500 502 503 504 /500.html;
+  error_page 500 502 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
+  }
+
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite ^(.*)$ /maintenance.html break;
   }
 }
 
@@ -99,7 +108,7 @@ server {
     return 444;
   }
 
-  location ~* ^/assets/ {
+  location ~* ^/(assets|static)/ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
@@ -111,6 +120,10 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
+    if (-f $document_root/offline) {
+      return 503;
+    }
+
     # If you don't find the filename in the static files
     # Then request it from the unicorn server
     if (!-f $request_filename) {
@@ -119,9 +132,14 @@ server {
     }
   }
 
-  error_page 500 502 503 504 /500.html;
+  error_page 500 502 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
+  }
+
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite ^(.*)$ /maintenance.html break;
   }
 }
 <% end %>
