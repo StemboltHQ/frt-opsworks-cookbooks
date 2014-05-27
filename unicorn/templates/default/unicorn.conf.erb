@@ -1,4 +1,4 @@
-worker_processes <%= node[:unicorn][:worker_processes] %>
+worker_processes <%= @deploy[:worker_processes] || node[:unicorn][:worker_processes] %>
 
 user "<%= @deploy[:user]%>"
 
