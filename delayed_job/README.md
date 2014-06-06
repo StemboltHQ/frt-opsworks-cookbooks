@@ -4,7 +4,14 @@ Configures delayed_job to work with monit.
 
 Requirements
 ------------
-None
+
+Your Gemfile will require:
+
+```ruby
+gem 'delayed_job_active_record'
+gem 'daemons'
+```
+
 
 Usage
 -----
