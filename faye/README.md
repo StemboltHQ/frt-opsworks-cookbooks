@@ -1,1 +1,0 @@
-Configures and starts faye
