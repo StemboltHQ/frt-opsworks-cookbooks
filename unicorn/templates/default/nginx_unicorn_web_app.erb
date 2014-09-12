@@ -154,3 +154,10 @@ server {
 }
   <% end %>
 <% end %>
+<% if @application[:strip_www] %>
+server {
+  <% domain = @application[:domains].first %>
+  server_name www.<%= domain %>;
+  return 301 $scheme://<%= domain %>$request_uri;
+}
+<% end %>
