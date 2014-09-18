@@ -35,7 +35,7 @@ server {
     add_header  Cache-Control public;
   }
 
-  location ~* ^/images/.*\.(jpg|jpeg|png|gif|ico|svg)$ {
+  location ~* ^/(assets|images)/.*\.(jpg|jpeg|png|gif|ico|svg)$ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
