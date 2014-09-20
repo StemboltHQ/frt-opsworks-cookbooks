@@ -1,4 +1,3 @@
-default[:nginx][:port] = 80
 default[:nginx][:gzip_types] = [
   "application/x-javascript",
   "application/xhtml+xml",
