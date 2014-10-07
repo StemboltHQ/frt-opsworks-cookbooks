@@ -161,3 +161,10 @@ server {
   return 301 $scheme://<%= domain %>$request_uri;
 }
 <% end %>
+<% if @application[:redirect_domains] %>
+server {
+  <% domain = @application[:domains].first %>
+  server_name <%= @application[:redirect_domains].join " " %>;
+  return 301 $scheme://<%= domain %>$request_uri;
+}
+<% end %>
