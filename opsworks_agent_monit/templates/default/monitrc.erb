@@ -9,7 +9,7 @@ set httpd port 2812 and use the address localhost
   allow localhost
 
 set mail-format {
-   subject: <%= node[:opsworks][:stack][:name] %> $EVENT $SERVICE
+   subject: <%= node[:opsworks][:stack][:name] %> - $EVENT: $SERVICE
    message: $EVENT Service $SERVICE
 
         Stack:  <%= node[:opsworks][:stack][:name] %>
