@@ -8,6 +8,21 @@ Include <%= node[:monit][:conf_dir] %>/*.monitrc
 set httpd port 2812 and use the address localhost
   allow localhost
 
+set mail-format {
+   subject: <%= node[:opsworks][:stack][:name] %> $EVENT $SERVICE
+   message: $EVENT Service $SERVICE
+
+        Stack:  <%= node[:opsworks][:stack][:name] %>
+        Layers: <%= node[:opsworks][:instance][:layers].join(', ') %>
+        Host:   <%= node[:opsworks][:instance][:hostname] %>
+        Date:   $DATE
+        Action: $ACTION
+        Description: $DESCRIPTION.
+
+   Yours sincerely,
+   monit
+}
+
 <% (node[:monit][:emails] || []).each do |email| %>
 set alert <%= email %> only on { timeout, nonexist }
 <% end %>
