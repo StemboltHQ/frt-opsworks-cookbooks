@@ -9,5 +9,8 @@
 
 bash "restart-all-delayed_job" do
   user 'root'
-  code "monit -g delayed_job restart"
+  code <<CODE
+monit -g delayed_job monitor
+monit -g delayed_job restart
+CODE
 end
