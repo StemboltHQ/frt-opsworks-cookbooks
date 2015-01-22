@@ -150,7 +150,11 @@ server {
 server {
   <% domain.slice!(/\Awww\./) %>
   server_name <%= domain %>;
+  <% if @application[:force_ssl] %>
+  return 301 https://www.<%= domain %>$request_uri;
+  <% else %>
   return 301 $scheme://www.<%= domain %>$request_uri;
+  <% end %>
 }
   <% end %>
 <% end %>
