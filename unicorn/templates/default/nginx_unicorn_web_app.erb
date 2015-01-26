@@ -146,7 +146,8 @@ server {
 <% end %>
 
 <% if @application[:force_www] %>
-  <% if (domain = @application[:domains].first).start_with?('www.') %>
+<% @application[:domains].each do |domain| %>
+  <% if domain.start_with?('www.') %>
 server {
   <% domain.slice!(/\Awww\./) %>
   server_name <%= domain %>;
@@ -157,6 +158,7 @@ server {
   <% end %>
 }
   <% end %>
+<% end %>
 <% end %>
 <% if @application[:strip_www] %>
 server {
