@@ -16,9 +16,12 @@ node[:deploy].each do |application, deploy|
 
     # We unmonitor the delayed jobs because we will stop them manually
     # They will become monitored again when restarted
+    # Sleeps after each command because monit does not wait for the server
     code <<CODE
 monit -g delayed_job unmonitor
+sleep 1
 monit reload
+sleep 1
 CODE
 
     action :nothing

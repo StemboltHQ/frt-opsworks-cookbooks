@@ -13,16 +13,13 @@ gem 'daemons'
 ```
 
 
-Usage
------
-#### delayed_job::default
-Just include `delayed_job` in your node's `run_list`:
+Opsworks Usage
+--------------
 
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[delayed_job]"
-  ]
-}
-```
+Simply add the `delayed_job::deploy` recipe to your deploy step.
+
+This recipe generates the monit configuration in
+`/etc/monit.d/APPLICATION_delayed_job.monitrc`, whenever this file changes, any
+existing delayed_job process is stopped.
+
+On each run `delayed_job` is restarted through monit.
