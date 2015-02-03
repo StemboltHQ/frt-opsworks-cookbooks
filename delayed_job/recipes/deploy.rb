@@ -1,4 +1,4 @@
-include_recipe 'delayed_job::default'
+include_recipe 'delayed_job::template'
 
 node[:deploy].each do |application, deploy|
 
