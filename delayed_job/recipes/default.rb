@@ -16,16 +16,20 @@ node[:deploy].each do |application, deploy|
 
   if deploy[:delayed_job].is_a?(Array)
     index = 0
-    workers = deploy[:delayed_job].map do |dj|
-      index += 1
-      identifier = dj[:identifier] || index
-      {
-        :timeout => dj[:timeout] || global[:timeout],
-        :bin => dj[:bin] || global[:bin],
-        :identifier => identifier,
-        :suffix => ".#{identifier}",
-        :options => dj[:options] || global[:options]
-      }
+    workers = []
+    deploy[:delayed_job].each do |dj|
+      worker_count = dj[:worker_count] || 1
+      worker_count.times do
+        index += 1
+        identifier = dj[:identifier] || index
+        workers << {
+          :timeout => dj[:timeout] || global[:timeout],
+          :bin => dj[:bin] || global[:bin],
+          :identifier => identifier,
+          :suffix => ".#{identifier}",
+          :options => dj[:options] || global[:options]
+        }
+      end
     end
   else
     # For backwards compatability with existing json
