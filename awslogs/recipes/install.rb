@@ -15,6 +15,6 @@ template "/tmp/awslogs.conf" do
 end
 
 execute "Install CloudWatch Logs agent" do
-  command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/awslogs.conf"
+  command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r #{node[:opsworks][:instance][:region]} -c /tmp/awslogs.conf"
   not_if { system "pgrep -f aws-logs-agent-setup" }
 end
