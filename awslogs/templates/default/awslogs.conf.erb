@@ -26,5 +26,10 @@ log_group_name = <%= stack_name %>-<%= application %>-delayed_job
 file = <%= deploy[:deploy_to] %>/shared/log/delayed_job.log
 log_stream_name = <%= hostname %>
 
+[<%= application %>-cron]
+log_group_name = <%= stack_name %>-<%= application %>-cron
+file = <%= deploy[:deploy_to] %>/shared/log/cron_log.log
+log_stream_name = <%= hostname %>
+
 <% end %>
 
