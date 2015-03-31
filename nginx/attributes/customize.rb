@@ -3,6 +3,7 @@ override[:nginx][:gzip_types] = [
   "application/xhtml+xml",
   "application/xml",
   "application/xml+rss",
+  "application/json",
   "text/css",
   "text/javascript",
   "text/plain",
