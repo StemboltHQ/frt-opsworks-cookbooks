@@ -6,7 +6,7 @@ node[:deploy].each do |application, deploy|
   bash "delayed_job-#{application}-stop" do
     cwd "#{deploy[:deploy_to]}/current"
     user 'deploy'
-    code 'bin/delayed_job stop'
+    code "RAILS_ENV=#{deploy[:rails_env]} bin/delayed_job stop"
 
     action :nothing
   end
