@@ -1,3 +1,6 @@
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/freerunningtech/cookbook-elasticsearch
+[submodule "opsworks_custom_env"]
+	path = opsworks_custom_env
+	url = https://github.com/redterror/opsworks_custom_env
