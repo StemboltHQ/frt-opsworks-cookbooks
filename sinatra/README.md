@@ -6,8 +6,11 @@ custom layer in AWS Opsworks. It requires a bit of custom JSON to get working.
 ## Usage
 
 Create a custom layer in the AWS console as one normally would, and add the
-`sinatra::configure` recipe to the "Configure" step and the `sinatra::deploy`
-recipe to the "Deploy" step.
+following recipes at the following steps:
+
+  - Setup: `sinatra::setup`
+  - Configure: `sinatra::configure`
+  - Deploy: `sinatra::deploy`
 
 ---
 
