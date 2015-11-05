@@ -8,7 +8,7 @@ custom layer in AWS Opsworks. It requires a bit of custom JSON to get working.
 Create a custom layer in the AWS console as one normally would, and add the
 following recipes at the following steps:
 
-  - Setup: `sinatra::setup`
+  - Setup: `ruby::default`, `sinatra::setup`
   - Configure: `sinatra::configure`
   - Deploy: `sinatra::deploy`
 
