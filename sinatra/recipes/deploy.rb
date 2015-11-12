@@ -39,6 +39,12 @@ node[:deploy].each do |application, _|
     app application
   end
 
+  execute "ln -s #{deploy[:deploy_to]}/shared/config/database.yml #{deploy[:deploy_to]}/current/config/database.yml" do
+    only_if do
+      File.exist? "#{deploy[:deploy_to]}/shared/config/database.yml"
+    end
+  end
+
   execute "bundle exec rake db:migrate" do
     cwd deploy[:deploy_to] + "/current"
     only_if do
@@ -48,11 +54,5 @@ node[:deploy].each do |application, _|
 
   execute "bundle install" do
     cwd deploy[:deploy_to] + "/current"
-  end
-
-  execute "ln -s #{deploy[:deploy_to]}/shared/config/database.yml #{deploy[:deploy_to]}/current/config/database.yml" do
-    only_if do
-      File.exist? "#{deploy[:deploy_to]}/shared/config/database.yml"
-    end
   end
 end
