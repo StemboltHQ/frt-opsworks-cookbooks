@@ -39,6 +39,13 @@ node[:deploy].each do |application, _|
     app application
   end
 
+  execute "bundle exec rake db:migrate" do
+    cwd deploy[:deploy_to] + "/current"
+    only_if do
+      deploy[:database].present?
+    end
+  end
+
   execute "bundle install" do
     cwd deploy[:deploy_to] + "/current"
   end
