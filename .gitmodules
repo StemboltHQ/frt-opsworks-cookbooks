@@ -13,3 +13,12 @@
 [submodule "apt"]
 	path = apt
 	url = https://github.com/opscode-cookbooks/apt.git
+[submodule "windows"]
+	path = windows
+	url = https://github.com/chef-cookbooks/windows.git
+[submodule "yum"]
+	path = yum
+	url = https://github.com/chef-cookbooks/yum.git
+[submodule "chef_handler"]
+	path = chef_handler
+	url = https://github.com/chef-cookbooks/chef_handler.git
