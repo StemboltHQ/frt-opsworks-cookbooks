@@ -7,3 +7,9 @@
 [submodule "opsworks_sidekiq"]
 	path = opsworks_sidekiq
 	url = https://github.com/StemboltHQ/opsworks_sidekiq.git
+[submodule "chef-datadog"]
+	path = chef-datadog
+	url = https://github.com/DataDog/chef-datadog.git
+[submodule "datadog"]
+	path = datadog
+	url = https://github.com/DataDog/chef-datadog.git
