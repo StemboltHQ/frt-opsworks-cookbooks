@@ -11,7 +11,7 @@ end
 package "postgresql-client" do
   package_name value_for_platform(
     ["centos","redhat","fedora"] => {"default" => "postgresql"},
-    "amazon" => "postgresql94",
+    "amazon" => {"default" => "postgresql94"},
     "default" => "postgresql-client"
   )
 
