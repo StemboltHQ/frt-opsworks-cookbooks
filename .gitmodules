@@ -25,3 +25,6 @@
 [submodule "packagecloud"]
 	path = packagecloud
 	url = https://github.com/computology/packagecloud-cookbook.git
+[submodule "appcanary"]
+	path = appcanary
+	url = https://github.com/StemboltHQ/chef-appcanary.git
