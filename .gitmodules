@@ -22,3 +22,6 @@
 [submodule "chef_handler"]
 	path = chef_handler
 	url = https://github.com/chef-cookbooks/chef_handler.git
+[submodule "packagecloud"]
+	path = packagecloud
+	url = https://github.com/computology/packagecloud-cookbook.git
