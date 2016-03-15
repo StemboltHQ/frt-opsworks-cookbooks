@@ -55,4 +55,10 @@ node[:deploy].each do |application, _|
       deploy[:database].present?
     end
   end
+
+  execute "restart Sinatra application #{application}" do
+    cwd deploy[:current_path]
+    command node[:opsworks][:rails_stack][:restart_command]
+    action :nothing
+  end
 end
