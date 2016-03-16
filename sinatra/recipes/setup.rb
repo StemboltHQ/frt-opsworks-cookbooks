@@ -7,6 +7,12 @@ include_recipe "nginx"
 node[:deploy].each do |application, deploy|
   next if deploy[:application_type] != 'rack'
 
+  opsworks_deploy_dir do
+    user deploy[:user]
+    group deploy[:group]
+    path deploy[:deploy_to]
+  end
+
   template "#{deploy[:deploy_to]}/shared/scripts/unicorn" do
     cookbook "unicorn"
     mode '0755'
