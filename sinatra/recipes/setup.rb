@@ -2,8 +2,6 @@
 # refuses to run if the application_type is not "rails", we need to do it
 # ourselves...
 
-include_recipe "nginx"
-
 node[:deploy].each do |application, deploy|
   next if deploy[:application_type] != 'rack'
 

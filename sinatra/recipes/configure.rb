@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe "nginx"
+
 node[:deploy].each do |application, _|
   deploy = node[:deploy][application]
 
