@@ -44,4 +44,22 @@ node[:deploy].each do |application, deploy|
       :environment => OpsWorks::Escape.escape_double_quotes(deploy[:environment_variables])
     )
   end
+
+  # Steal the database.yml template from the opsworks rails cookbook
+  template "#{deploy[:deploy_to]}/shared/config/database.yml" do
+    source "database.yml.erb"
+    cookbook "rails"
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(database: deploy[:database], environment: deploy[:rack_env])
+
+    notifies :run, "execute[restart Sinatra application #{application}]"
+
+    only_if do
+      deploy[:database][:host].present? && File.directory?("#{deploy[:deploy_to]}/shared/config/")
+    end
+  end
+
+  include_recipe "nginx"
 end
