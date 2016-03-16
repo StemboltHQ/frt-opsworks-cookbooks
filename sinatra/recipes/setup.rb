@@ -7,6 +7,10 @@ include_recipe "nginx"
 node[:deploy].each do |application, deploy|
   next if deploy[:application_type] != 'rack'
 
+  opsworks_deploy_user do
+    deploy_data deploy
+  end
+
   opsworks_deploy_dir do
     user deploy[:user]
     group deploy[:group]
