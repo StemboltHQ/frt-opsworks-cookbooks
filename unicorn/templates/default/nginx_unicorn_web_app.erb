@@ -48,9 +48,15 @@ server {
     proxy_redirect off;
 
     <% if @application[:force_ssl] %>
+    set $https_forward "https://$host$uri";
+    # Don't disclose private IP addresses when no host specified (HTTP/1.0)
+    if ($host ~ "\d+\.\d+\.\d+\.\d+") {
+      set $https_forward "https://<%= @application[:domains].first %>$uri";
+    }
+
     # Rewrite everything to HTTPS. Except for the health_check.
     if ($http_x_forwarded_proto != 'https') {
-      rewrite ^((?!/health_check).) https://$host$uri permanent;
+      rewrite ^((?!/health_check).) $https_forward permanent;
     }
     <% end %>
 
