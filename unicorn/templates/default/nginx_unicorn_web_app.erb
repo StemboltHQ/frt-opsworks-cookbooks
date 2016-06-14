@@ -22,6 +22,15 @@ server {
     return 444;
   }
 
+  <% if @application[:nginx] && @application[:nginx][:proxy_passes] %>
+    <% @application[:nginx][:proxy_passes].each do |proxy| %>
+    location <%= proxy[:location] %> {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_pass <%= proxy[:upstream] %>;
+    }
+    <% end %>
+  <% end %>
+
   location ~* \.(eot|ttf|woff|ico)$ {
     gzip_static on;
     expires     max;
