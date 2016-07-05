@@ -6,4 +6,19 @@
 	url = https://github.com/redterror/opsworks_custom_env
 [submodule "opsworks_sidekiq"]
 	path = opsworks_sidekiq
-	url = https://github.com/drakerlabs/opsworks_sidekiq
+	url = https://github.com/StemboltHQ/opsworks_sidekiq.git
+[submodule "datadog"]
+	path = datadog
+	url = https://github.com/DataDog/chef-datadog.git
+[submodule "apt"]
+	path = apt
+	url = https://github.com/opscode-cookbooks/apt.git
+[submodule "windows"]
+	path = windows
+	url = https://github.com/chef-cookbooks/windows.git
+[submodule "yum"]
+	path = yum
+	url = https://github.com/chef-cookbooks/yum.git
+[submodule "chef_handler"]
+	path = chef_handler
+	url = https://github.com/chef-cookbooks/chef_handler.git

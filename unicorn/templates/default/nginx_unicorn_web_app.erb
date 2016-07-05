@@ -22,6 +22,15 @@ server {
     return 444;
   }
 
+  <% if @application[:nginx] && @application[:nginx][:proxy_passes] %>
+    <% @application[:nginx][:proxy_passes].each do |proxy| %>
+    location <%= proxy[:location] %> {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_pass <%= proxy[:upstream] %>;
+    }
+    <% end %>
+  <% end %>
+
   location ~* \.(eot|ttf|woff|ico)$ {
     gzip_static on;
     expires     max;
@@ -48,9 +57,15 @@ server {
     proxy_redirect off;
 
     <% if @application[:force_ssl] %>
+    set $https_forward "https://$host$uri";
+    # Don't disclose private IP addresses when no host specified (HTTP/1.0)
+    if ($host ~ "\d+\.\d+\.\d+\.\d+") {
+      set $https_forward "https://<%= @application[:domains].first %>$uri";
+    }
+
     # Rewrite everything to HTTPS. Except for the health_check.
     if ($http_x_forwarded_proto != 'https') {
-      rewrite ^((?!/health_check).) https://$host$uri permanent;
+      rewrite ^((?!/health_check).) $https_forward permanent;
     }
     <% end %>
 
