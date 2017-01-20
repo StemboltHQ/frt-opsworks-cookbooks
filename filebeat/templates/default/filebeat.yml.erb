@@ -1,0 +1,19 @@
+filebeat.prospectors:
+- input_type: log
+
+  paths:
+  <% @paths.each do |path| %>
+    <%= "- #{path}" %>
+  <% end %>
+
+  json.message_key: event
+  json.keys_under_root: true
+
+output.elasticsearch:
+  hosts:
+  <% @hosts.each do |host| %>
+    <%= "- #{host}" %>
+  <% end %>
+  protocol: <%= @protocol %>
+  username: <%= @username %>
+  password: <%= @password %>
