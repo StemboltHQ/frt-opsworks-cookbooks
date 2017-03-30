@@ -37,7 +37,7 @@ Two processes running all queues.
   "deploy": {
     "myapp": {
       "delayed_job": [{
-        "options": "-n 2"
+        "worker_count": 2
       }],
 ```
 
