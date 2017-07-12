@@ -1,0 +1,5 @@
+DEPENDENCIES
+  logrotate (= 2.2.0)
+
+GRAPH
+  logrotate (2.2.0)
