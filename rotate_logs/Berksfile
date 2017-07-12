@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+source 'https://supermarket.chef.io'
+
+# custom path - vendor/cookbooks
+# install new cookbook using following command
+# `berks vendor vendor/cookbooks`
