@@ -1,0 +1,7 @@
+name             'rotate_logs'
+maintainer       'SDTechDev Dev Team'
+maintainer_email 'dev@sdtechdev.com'
+license          'Proprietary - All Rights Reserved'
+description      'Rotates logs and uploads them to S3'
+version          '0.1.0'
+depends          'logrotate', '= 2.2.0'
