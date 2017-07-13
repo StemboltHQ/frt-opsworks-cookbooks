@@ -1,8 +1,0 @@
-# frozen_string_literal: true
-source 'https://supermarket.chef.io'
-
-# custom path - vendor/cookbooks
-# install new cookbook using following command
-# `berks vendor vendor/cookbooks`
-
-cookbook 'logrotate', '= 2.1.0', path: 'vendor/cookbooks/logrotate'

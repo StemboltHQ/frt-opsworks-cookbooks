@@ -1,7 +1,0 @@
-DEPENDENCIES
-  logrotate (= 2.1.0)
-
-GRAPH
-  compat_resource (12.19.0)
-  logrotate (2.1.0)
-    compat_resource (>= 0.0.0)
