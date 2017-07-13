@@ -1,7 +1,0 @@
-DEPENDENCIES
-  appcanary (~> 0.3.0)
-
-GRAPH
-  appcanary (0.3.1)
-    packagecloud (~> 0.0.19)
-  packagecloud (0.0.19)
