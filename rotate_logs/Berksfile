@@ -5,4 +5,4 @@ source 'https://supermarket.chef.io'
 # install new cookbook using following command
 # `berks vendor vendor/cookbooks`
 
-cookbook 'logrotate', '= 2.2.0', path: 'vendor/cookbooks/logrotate'
+cookbook 'logrotate', '= 2.1.0', path: 'vendor/cookbooks/logrotate'

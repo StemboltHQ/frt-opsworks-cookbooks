@@ -1,0 +1,10 @@
+sudo: false
+branches:
+  only:
+    - master
+language: ruby
+cache: bundler
+rvm:
+  - 2.2
+script:
+  - make travis
