@@ -61,7 +61,7 @@ logrotate_app 'syslog' do
   postrotate  ['/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true']
 end
 
-postrotate_app 'yum' do
+logrotate_app 'yum' do
   path      '/var/log/yum.log'
   options   ['missingok', 'notifempty']
   frequency 'yearly'
