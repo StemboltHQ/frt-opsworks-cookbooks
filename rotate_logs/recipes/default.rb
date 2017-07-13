@@ -1,14 +1,14 @@
 include_recipe 'logrotate::global'
 include_recipe 'logrotate::default'
 
-node['logrotate']['global']['/var/log/wtmp'] = {
+node.set['logrotate']['global']['/var/log/wtmp'] = {
   'monthly' => true,
   'create'  => '0664 root utmp',
   'rotate'  => 1,
   'minsize' => '1M'
 }
 
-node['logrotate']['global']['/var/log/btmp'] = {
+node.set['logrotate']['global']['/var/log/btmp'] = {
   'missingok' => true,
   'monthly'   => true,
   'create'    => '0600 root utmp',
