@@ -16,7 +16,7 @@
     "ubuntu": ">= 0.0.0"
   },
   "dependencies": {
-
+    "compat_resource": ">= 0.0.0"
   },
   "recommendations": {
 
@@ -42,14 +42,12 @@
   "recipes": {
     "logrotate": "Installs logrotate package"
   },
-  "version": "2.2.0",
+  "version": "2.1.0",
   "source_url": "https://github.com/stevendanna/logrotate",
   "issues_url": "https://github.com/stevendanna/logrotate/issues",
   "privacy": false,
   "chef_versions": [
-    [
-      ">= 12.5"
-    ]
+
   ],
   "ohai_versions": [
 

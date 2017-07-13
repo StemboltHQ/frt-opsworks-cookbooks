@@ -6,21 +6,10 @@ application specific logrotate configuration.
 
 
 ## Requirements
-
-### Platforms
-
 Should work on any platform that includes a 'logrotate' package and
 writes logrotate configuration to /etc/logrotate.d. Tested on Ubuntu
 and Centos.
 
-
-### Chef
-
-- Chef 12.5+
-
-### Cookbooks
-
-- none
 
 ## Recipes
 
@@ -129,7 +118,7 @@ The resource takes the following properties:
   "logrotate.erb".
 
 - `template_mode`: the mode to create the logrotate template with
-  (default: "0644")
+  (default: "0440")
 
 - `template_owner`: the owner of the logrotate template (default:
   "root")

@@ -9,12 +9,6 @@
 <%= k %> <%= v %>
 <% end -%>
 
-<% @configuration.scripts.each do | scripttype, body | -%>
-<%= scripttype %>
-<%= body %>
-endscript
-<% end -%>
-
 include /etc/logrotate.d
 
 <% @configuration.paths.each do |path, path_config| -%>
