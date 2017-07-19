@@ -37,7 +37,14 @@ logrotate_app 'nginx' do
   frequency  'daily'
   rotate     10
   create     '0644 nginx nginx'
-  postrotate ['/etc/init.d/nginx reopen_logs']
+  postrotate <<-EOF
+    /etc/init.d/nginx reopen_logs
+
+    export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
+    export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
+
+    /usr/bin/aws s3 cp #{node['logrotate']['nginx']['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOMENAME'/#{node['logrotate']['nginx']['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{node['logrotate']['nginx']['options']}
+  EOF
 end
 
 logrotate_app 'psacct' do
