@@ -35,9 +35,16 @@ logrotate_app 'nginx' do
   path       '/var/log/nginx/*log'
   options    ['missingok', 'notifempty', 'compress', 'sharedscripts']
   frequency  'daily'
-  rotate     10
+  rotate     5
   create     '0644 nginx nginx'
-  postrotate ['/etc/init.d/nginx reopen_logs']
+  postrotate <<-EOF
+    /etc/init.d/nginx reopen_logs
+
+    export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
+    export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
+
+    /usr/bin/aws s3 cp #{node['logrotate']['nginx']['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOMENAME'/#{node['logrotate']['nginx']['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{node['logrotate']['nginx']['options']}
+  EOF
 end
 
 logrotate_app 'psacct' do
@@ -70,11 +77,17 @@ logrotate_app 'yum' do
 end
 
 # Rails apps
-node['logrotate']['rails_apps'].each do |app_name, app_log_path|
+node['logrotate']['rails_apps'].each do |app_name, app_data|
   logrotate_app app_name do
-    path      app_log_path
-    options   ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts']
-    frequency 'daily'
-    rotate    30
+    path       app_data['log_path']
+    options    ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts']
+    frequency  'daily'
+    rotate     5
+    postrotate <<-EOF
+      export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
+      export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
+
+      /usr/bin/aws s3 cp #{app_data['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOMENAME'/#{app_data['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{app_data['options']}
+    EOF
   end
 end
