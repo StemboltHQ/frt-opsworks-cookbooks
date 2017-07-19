@@ -9,5 +9,3 @@ node.default['logrotate']['global']['rotate'] = 4
 node.default['logrotate']['global']['create'] = true
 
 node.default['logrotate']['global']['dateext'] = true
-
-node.default['logrotate']['global']['include'] = '/etc/logrotate.d'
