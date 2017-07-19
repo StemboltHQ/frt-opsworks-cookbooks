@@ -15,7 +15,10 @@ node.set['logrotate']['global']['/var/log/btmp'] = {
   'rotate'    => 1
 }
 
+MODE = '0644'
+
 logrotate_app 'dracut' do
+  template_mode MODE
   path      '/var/log/dracut.log'
   options   ['missingok', 'notifempty']
   frequency 'yearly'
@@ -24,6 +27,7 @@ logrotate_app 'dracut' do
 end
 
 logrotate_app 'monit' do
+  template_mode MODE
   path       '/var/log/monit'
   options    ['missingok', 'notifempty']
   size       '100k'
@@ -32,6 +36,7 @@ logrotate_app 'monit' do
 end
 
 logrotate_app 'nginx' do
+  template_mode MODE
   path       '/var/log/nginx/*log'
   options    ['missingok', 'notifempty', 'compress', 'sharedscripts']
   frequency  'daily'
@@ -48,6 +53,7 @@ logrotate_app 'nginx' do
 end
 
 logrotate_app 'psacct' do
+  template_mode MODE
   path      '/var/account/pacct'
   options   ['compress', 'delaycompress', 'notifempty']
   frequency 'daily'
@@ -57,6 +63,7 @@ logrotate_app 'psacct' do
 end
 
 logrotate_app 'syslog' do
+  template_mode MODE
   path        [
                 '/var/log/cron',
                 '/var/log/maillog',
@@ -69,6 +76,7 @@ logrotate_app 'syslog' do
 end
 
 logrotate_app 'yum' do
+  template_mode MODE
   path      '/var/log/yum.log'
   options   ['missingok', 'notifempty']
   frequency 'yearly'
@@ -79,6 +87,7 @@ end
 # Rails apps
 node['logrotate']['rails_apps'].each do |app_name, app_data|
   logrotate_app app_name do
+    template_mode MODE
     path       app_data['log_path']
     options    ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts']
     frequency  'daily'
