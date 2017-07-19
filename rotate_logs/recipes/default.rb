@@ -35,7 +35,7 @@ logrotate_app 'nginx' do
   path       '/var/log/nginx/*log'
   options    ['missingok', 'notifempty', 'compress', 'sharedscripts']
   frequency  'daily'
-  rotate     10
+  rotate     5
   create     '0644 nginx nginx'
   postrotate <<-EOF
     /etc/init.d/nginx reopen_logs
@@ -82,7 +82,7 @@ node['logrotate']['rails_apps'].each do |app_name, app_data|
     path       app_data['log_path']
     options    ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts']
     frequency  'daily'
-    rotate     30
+    rotate     5
     postrotate <<-EOF
       export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
       export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
