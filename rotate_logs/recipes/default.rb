@@ -48,7 +48,7 @@ logrotate_app 'nginx' do
     export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
     export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
 
-    /usr/bin/aws s3 cp #{node['logrotate']['nginx']['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOMENAME'/#{node['logrotate']['nginx']['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{node['logrotate']['nginx']['options']}
+    /usr/bin/aws s3 cp #{node['logrotate']['nginx']['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOSTNAME'/#{node['logrotate']['nginx']['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{node['logrotate']['nginx']['options']}
   EOF
 end
 
