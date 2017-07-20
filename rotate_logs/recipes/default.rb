@@ -96,7 +96,7 @@ node['logrotate']['rails_apps'].each do |app_name, app_data|
       export AWS_ACCESS_KEY_ID=#{node['logrotate']['aws_access_key']}
       export AWS_SECRET_ACCESS_KEY=#{node['logrotate']['aws_secret_key']}
 
-      /usr/bin/aws s3 cp #{app_data['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOMENAME'/#{app_data['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{app_data['options']}
+      /usr/bin/aws s3 cp #{app_data['log_dir']} s3://#{node['logrotate']['s3_bucket']}/'$HOSTNAME'/#{app_data['s3_dir']}/ --region #{node['logrotate']['s3_region']} #{app_data['options']}
     EOF
   end
 end
