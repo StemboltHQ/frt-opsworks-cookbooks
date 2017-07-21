@@ -25,3 +25,6 @@
 [submodule "logrotate"]
 	path = logrotate
 	url = https://github.com/stevendanna/logrotate
+[submodule "infrastructure-agent-chef"]
+	path = infrastructure-agent-chef
+	url = https://github.com/newrelic/infrastructure-agent-chef
