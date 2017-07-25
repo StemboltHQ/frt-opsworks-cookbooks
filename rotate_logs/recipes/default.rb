@@ -38,7 +38,7 @@ end
 logrotate_app 'nginx' do
   template_mode MODE
   path         '/var/log/nginx/*log'
-  options      ['missingok', 'notifempty', 'compress', 'sharedscripts']
+  options      ['missingok', 'notifempty', 'compress', 'sharedscripts', 'dateext']
   frequency    'daily'
   rotate       5
   create       '0644 nginx nginx'
@@ -89,7 +89,7 @@ node['logrotate']['rails_apps'].each do |app_name, app_data|
   logrotate_app app_name do
     template_mode MODE
     path          app_data['log_path']
-    options       ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts']
+    options       ['missingok', 'compress', 'delaycompress', 'notifempty', 'copytruncate', 'sharedscripts', 'dateext']
     frequency     'daily'
     rotate        5
     postrotate    <<-EOF
