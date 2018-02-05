@@ -18,7 +18,7 @@ node[:deploy].each do |application, deploy|
           :timeout => dj[:timeout] || global[:timeout],
           :bin => dj[:bin] || global[:bin],
           :identifier => identifier,
-          :suffix => ".#{identifier}",
+          :suffix => ".#{index}",
           :options => dj[:options] || global[:options]
         }
       end
