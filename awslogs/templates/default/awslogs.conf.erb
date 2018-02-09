@@ -31,5 +31,32 @@ log_group_name = <%= stack_name %>-<%= application %>-cron
 file = <%= deploy[:deploy_to] %>/shared/log/cron_log.log
 log_stream_name = <%= hostname %>
 
+[<%= application %>-braintree]
+log_group_name = <%= stack_name %>-<%= application %>-braintree
+file = <%= deploy[:deploy_to] %>/shared/log/braintree.log
+log_stream_name = <%= hostname %>
+
+[<%= application %>-netsuite]
+log_group_name = <%= stack_name %>-<%= application %>-netsuite
+file = <%= deploy[:deploy_to] %>/shared/log/netsuite.log
+log_stream_name = <%= hostname %>
+
+[<%= application %>-newrelic]
+log_group_name = <%= stack_name %>-<%= application %>-newrelic
+file = <%= deploy[:deploy_to] %>/shared/log/newrelic_agent.log
+log_stream_name = <%= hostname %>
+
+[<%= application %>-unicorn_stderr]
+log_group_name = <%= stack_name %>-<%= application %>-unicorn_stderr
+file = <%= deploy[:deploy_to] %>/shared/log/unicorn.stderr.log
+log_stream_name = <%= hostname %>
+
+[<%= application %>-unicorn_stdout]
+log_group_name = <%= stack_name %>-<%= application %>-unicorn_stdout
+file = <%= deploy[:deploy_to] %>/shared/log/unicorn.stderr.log
+log_stream_name = <%= hostname %>
+
+
+
 <% end %>
 
