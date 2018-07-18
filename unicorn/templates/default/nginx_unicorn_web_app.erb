@@ -38,7 +38,7 @@ server {
     add_header  Access-Control-Allow-Origin *;
   }
 
-  location ~* ^/(assets|static)/ {
+  location ~* ^/(assets|static|packs)/ {
     gzip_static on;
     expires     max;
     add_header  Cache-Control public;
