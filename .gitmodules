@@ -22,3 +22,9 @@
 [submodule "chef_handler"]
 	path = chef_handler
 	url = https://github.com/chef-cookbooks/chef_handler.git
+[submodule "logrotate"]
+	path = logrotate
+	url = https://github.com/stevendanna/logrotate
+[submodule "infrastructure-agent-chef"]
+	path = infrastructure-agent-chef
+	url = https://github.com/newrelic/infrastructure-agent-chef
