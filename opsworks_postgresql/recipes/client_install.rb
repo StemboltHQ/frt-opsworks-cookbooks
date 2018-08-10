@@ -1,7 +1,7 @@
 package "postgresql-devel" do
   package_name value_for_platform(
     ["centos","redhat","fedora"] => {"default" => "postgresql-devel"},
-    "amazon" => {"default" => "postgresql94-devel"},
+    "amazon" => {"default" => "postgresql96-devel"},
     "ubuntu" => {"default" => "libpq-dev"}
   )
 
@@ -11,7 +11,7 @@ end
 package "postgresql-client" do
   package_name value_for_platform(
     ["centos","redhat","fedora"] => {"default" => "postgresql"},
-    "amazon" => {"default" => "postgresql94"},
+    "amazon" => {"default" => "postgresql96"},
     "default" => "postgresql-client"
   )
 
