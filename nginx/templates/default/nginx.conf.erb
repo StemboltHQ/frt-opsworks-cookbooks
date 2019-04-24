@@ -37,6 +37,10 @@ http {
 
   client_max_body_size <%= node[:nginx][:client_max_body_size] %>;
 
+  <% if node[:nginx][:proxy_buffer_size] %>
+  proxy_buffer_size <%= node[:nginx][:proxy_buffer_size] %>;
+  <% end %>
+
   server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;
 
   include <%= node[:nginx][:dir] %>/conf.d/*.conf;
