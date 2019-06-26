@@ -1,0 +1,6 @@
+name             'python_deps'
+maintainer       'SDTechDev Dev Team'
+maintainer_email 'dev@sdtechdev.com'
+license          'Proprietary - All Rights Reserved'
+description      'installs jiffyshirts app python deps'
+version          '0.1.0'
