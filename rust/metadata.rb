@@ -1,0 +1,6 @@
+name             'rust'
+maintainer       'SDTechDev Dev Team'
+maintainer_email 'dev@sdtechdev.com'
+license          'Proprietary - All Rights Reserved'
+description      'installs rust for jiffyshirts app'
+version          '0.1.0'
