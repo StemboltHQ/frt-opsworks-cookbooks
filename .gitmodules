@@ -1,3 +1,0 @@
-[submodule "infrastructure-agent-chef"]
-	path = infrastructure-agent-chef
-	url = https://github.com/newrelic/infrastructure-agent-chef
