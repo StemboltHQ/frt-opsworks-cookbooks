@@ -10,9 +10,6 @@
 [submodule "datadog"]
 	path = datadog
 	url = https://github.com/DataDog/chef-datadog.git
-[submodule "apt"]
-	path = apt
-	url = https://github.com/opscode-cookbooks/apt.git
 [submodule "windows"]
 	path = windows
 	url = https://github.com/chef-cookbooks/windows.git
