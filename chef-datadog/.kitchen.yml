@@ -1,0 +1,472 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 1024
+
+platforms:
+# Loop through two lists and output a total matrix of all possible platform + chef versions
+# fedora-20 needs kitchen-docker 1.7.0, but other bugs prevent that version from being used.
+<% test_platforms = %w(
+      ubuntu-14.04
+      ubuntu-12.04
+      centos-6.6
+      centos-5.11
+      debian-7.7
+    )
+    chef_versions = %w(
+      12.2.1
+      11.18.6
+    )
+
+    test_platforms.product(chef_versions).each do |platform_version, chef_version|
+%>
+
+- name: <%= platform_version %>-<%= chef_version %>
+  driver_config:
+    box: opscode_<%= platform_version %>_chef-provisionerless
+    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_<%= platform_version %>_chef-provisionerless.box
+    require_chef_omnibus: <%= chef_version %>
+<% end
+
+windows_platform = 'windows-2012r2'
+
+chef_versions.each do |chef_version|
+%>
+
+- name: <%= windows_platform %>-<%= chef_version %>
+  driver_config:
+    box: mwrock/Windows2012R2  # lightweight windows box
+    require_chef_omnibus: <%= chef_version %>
+    communicator: winrm
+    customize:
+      usb: "off"  # USB is disabled on this box to make it more lightweight
+      vrde: "on"  # enable RDP
+  transport:
+    name: winrm
+
+<% end %>
+
+suites:
+# - name: default
+#   run_list: ["recipe[datadog::default]"]
+#   attributes: {}
+#   # This should actually do nothing.
+#   # There is a sanity.bats test to simply verify that /tmp exists.
+
+- name: dd-agent
+  run_list:
+    - recipe[datadog::dd-agent]
+  attributes:
+    datadog: &DATADOG
+      api_key: somethingnotnil
+      application_key: alsonotnil
+
+- name: dd-handler
+  run_list:
+    - recipe[datadog::dd-handler]
+  attributes:
+    datadog: &DATADOG
+      api_key: somethingnotnil
+      application_key: alsonotnil
+
+- name: datadog_activemq
+  run_list:
+    - recipe[datadog::activemq]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      activemq:
+        instances:
+          - host: localhost
+            port: 1099
+            user: someuser
+            password: somepass
+
+- name: datadog_apache
+  run_list:
+    - recipe[datadog::apache]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      apache:
+        instances:
+          - status_url: http://mysite.com/server-status?auto
+            apache_user: someusername
+            apache_password: sekret
+            tags:
+              - kitchen
+              - sink
+
+- name: datadog_cacti
+  run_list:
+    - recipe[datadog::cacti]
+  excludes: &WINDOWS_PLATFORMS
+  <% chef_versions.each do |chef_version| %>
+    - <%= windows_platform %>-<%= chef_version %>
+  <% end %>
+  attributes:
+    datadog:
+      <<: *DATADOG
+      cacti:
+        instances:
+          - mysql_host: localhost
+            mysql_user: mysql_read_only
+            mysql_password: mysql_read_only_password
+            rrd_path: /path/to/cacti/rra
+            rrd_whitelist: /path/to/rrd_whitelist.txt
+            field_names:
+              - ifIndex
+              - dskDevice
+              - ifName
+
+- name: datadog_consul
+  run_list:
+    - recipe[datadog::consul]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      consul:
+        instances:
+          - url: http://localhost:8500
+            new_leader_checks: false
+            catalog_checks: false
+            service_whitelist: consul
+            tags: ['_default']
+
+- name: datadog_cassandra
+  run_list:
+    - recipe[datadog::cassandra]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      cassandra:
+        instances:
+          - host: localhost
+            port: 7199
+            user: someuser
+            password: somepass
+            process_name_regex: .*cassandra.*
+
+- name: datadog_couchdb
+  run_list:
+    - recipe[datadog::couchdb]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      couch:
+        instances:
+          - server: http://localhost:5984
+            user: someuser
+            password: somepass
+
+- name: datadog_etcd
+  run_list:
+    - recipe[datadog::etcd]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      etcd:
+        instances:
+          - url: http://localhost:2379
+            timeout: 5
+            ssl_keyfile: /etc/etcd/ssl.key
+            ssl_certfile: /etc/etcd/ssl.crt
+            ssl_cert_validation: true
+            ssl_ca_certs: /etc/etcd/ca-certs.crt
+
+- name: datadog_docker
+  run_list:
+    - recipe[datadog::docker]
+  excludes: *WINDOWS_PLATFORMS
+  attributes:
+    datadog:
+      <<: *DATADOG
+      docker:
+        init_config:
+          docker_root: /
+          socket_timeout: 10
+        instances:
+          - url: unix://var/run/docker.sock
+            new_tag_names: false
+            tag_by_command: false
+            tags:
+              - toto
+              - tata
+            include:
+              - docker_image:ubuntu
+              - docker_image:debian
+            exclude:
+              - .*
+            collect_events: true
+            collect_container_size: false
+            collect_all_metrics: false
+            collect_images_stats: false
+
+- name: datadog_elasticsearch
+  run_list:
+    - recipe[datadog::elasticsearch]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      elasticsearch:
+        instances:
+          - url: http://localhost:9200
+            username: someuser
+            password: somepass
+            is_external: false
+            pshard_stats: true
+            shard_level_metrics: true
+            tags:
+              - kitchen
+              - sink
+
+- name: datadog_fluentd
+  run_list:
+    - recipe[datadog::fluentd]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      fluentd:
+        instances:
+          - monitor_agent_url: http://localhost.com:24220/api/plugins.json
+            plugin_ids:
+              - api
+              - plugin
+            tags:
+              - kitchen
+              - sink
+
+- name: datadog_haproxy
+  run_list:
+    - recipe[datadog::haproxy]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      haproxy:
+        instances:
+          - username: admin
+            password: sekret
+            url: http://localhost:22002/status
+            status_check: false
+            collect_aggregates_only: true
+            collect_status_metrics: true
+
+- name: datadog_http_check
+  run_list:
+    - recipe[datadog::http_check]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      http_check:
+        instances:
+          - name: test
+            url: http://localhost/
+          - name: test2
+            url: http://localhost/
+
+- name: datadog_jmx
+  run_list:
+    - recipe[datadog::jmx]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      jmx:
+        instances:
+          - host: localhost
+            port: 7199
+            user: someuser
+            password: somepass
+            name: jmx_instance
+            tags:
+              env: stage
+              newTag: test
+            conf:
+              - include:
+                  domain: my_domain
+                  bean:
+                    - my_bean
+                    - my_second_bean
+                  attribute:
+                    attribute1:
+                      metric_type: counter
+                      alias: jmx.my_metric_name
+                    attribute2:
+                      metric_type: gauge
+                      alias: jmx.my2ndattribute
+              - include:
+                  domain: 2nd_domain
+                exclude:
+                  bean:
+                    - excluded_bean
+              - include:
+                  domain_regex: regex_on_domain
+                exclude:
+                  bean_regex:
+                    - regex_on_excluded_bean
+
+- name: datadog_mongo
+  run_list:
+    - recipe[datadog::mongo]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      mongo:
+        instances:
+          - host: localhost
+            port: 27017
+
+- name: datadog_ntp
+  run_list:
+    - recipe[datadog::ntp]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      ntp:
+        instances:
+          - offset_threshold: 600
+            host: europe.pool.ntp.org
+            port: 9999
+            version: 4
+            timeout: 10
+
+- name: datadog_kafka
+  run_list:
+    - recipe[datadog::kafka]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      kafka:
+        instances:
+          - host: localhost
+            port: 9999
+            name: my_kafka
+            user: username
+            password: password
+            java_bin_path: /path/to/java
+            trust_store_path: /path/to/trustStore.jks
+            trust_store_password: password
+
+- name: datadog_kafka_consumer
+  run_list:
+    - recipe[datadog::kafka_consumer]
+  excludes: *WINDOWS_PLATFORMS
+  attributes:
+    datadog:
+      <<: *DATADOG
+      kafka_consumer:
+        instances:
+          - kafka_connect_str: localhost:19092
+            zk_connect_str: localhost:2181
+            zk_prefix: /0.8
+            consumer_groups:
+              my_consumer:
+                my_topic: [0, 1, 4, 12]
+
+- name: datadog_mesos
+  run_list:
+    - recipe[datadog::mesos]
+  excludes: *WINDOWS_PLATFORMS
+  attributes:
+    datadog:
+      <<: *DATADOG
+      mesos:
+        instances:
+          - url: localhost:5050
+            timeout: 8
+            tags:
+              - toto
+              - tata
+        init_config:
+          default_timeout: 10
+
+- name: datadog_pgbouncer
+  run_list:
+    - recipe[datadog::pgbouncer]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      pgbouncer:
+        instances:
+          - host: localhost
+            port: 6432
+            username: john
+            password: doe
+            tags:
+              - toto
+              - tata
+
+- name: datadog_process
+  run_list:
+    - recipe[datadog::process]
+  excludes: *WINDOWS_PLATFORMS
+  attributes:
+    datadog:
+      <<: *DATADOG
+      process:
+        instances:
+          - name: "pidname"
+            exact_match: false
+            ignore_denied_access: true
+            tags:
+              - "env:test"
+              - "appname:somename"
+            search_string:
+              - "somepid"
+              - "pidname"
+
+- name: datadog_supervisord
+  run_list:
+    - recipe[datadog::supervisord]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      supervisord:
+        instances:
+          - name: server0
+            socket: unix:///var/run/default-supervisor.sock
+          - name: server1
+            host: localhost
+            port: 9001
+            user: user
+            pass: pass
+            proc_names:
+              - apache2
+              - webapp
+
+- name: datadog_tcp_check
+  run_list:
+    - recipe[datadog::tcp_check]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      tcp_check:
+        instances:
+          - name: test
+            host: localhost
+            port: 1234
+          - name: test2
+            host: localhost
+            port: 5678
+- name: datadog_postfix
+  run_list:
+    - recipe[sudo]
+    - recipe[datadog::postfix]
+  attributes:
+    datadog:
+      <<: *DATADOG
+      postfix:
+        instances:
+        - directory: "/var/spool/postfix"
+          queues:
+          - incoming
+          - active
+          - deferred
+          tags:
+          - prod
+          - postfix_core
+        - directory: "/var/spool/postfix"
+          queues:
+          - bounce
+          tags:
+          - test
