@@ -1,0 +1,60 @@
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: debian-7.8
+    run_list: apt::default
+  - name: debian-8.1
+    run_list: apt::default
+  - name: ubuntu-12.04
+    run_list: apt::default
+  - name: ubuntu-14.04
+    run_list: apt::default
+  - name: ubuntu-15.04
+    run_list: apt::default
+
+suites:
+  - name: default
+    run_list:
+      - recipe[apt]
+
+  - name: cacher-client
+    run_list:
+      - recipe[apt::cacher-client]
+
+  - name: cacher-ng
+    run_list:
+      - recipe[apt::cacher-ng]
+
+  - name: cacher-ng-client
+    run_list:
+      - recipe[apt_test::cacher-ng-client]
+    attributes:
+      apt:
+        cacher_dir: '/tmp/apt-cacher'
+        cacher_port: '9876'
+        cacher_interface: 'eth0'
+        compiletime: true
+
+  - name: compile-time
+    run_list:
+      - recipe[apt::default]
+    attributes:
+      apt:
+        compile_time_update: true
+
+  - name: lwrps
+    run_list:
+      - recipe[apt_test::lwrps]
+
+  - name: unattended-upgrades
+    run_list:
+      - recipe[apt::unattended-upgrades]
+    attributes:
+      apt:
+        unattended_upgrades:
+          enable: true
+
