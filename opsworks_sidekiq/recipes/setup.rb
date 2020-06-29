@@ -2,6 +2,18 @@
 
 include_recipe "opsworks_sidekiq::service"
 
+def deep_transform_values(values)
+  case values
+  when Chef::Node::ImmutableArray
+    values.to_a.map { |value| deep_transform_values(value) }
+  when Chef::Node::ImmutableMash
+    # No further transformation since we have no nested hash configurations
+    values.to_hash
+  else
+    values
+  end
+end
+
 # setup sidekiq service per app
 node[:deploy].each do |application, deploy|
 
@@ -52,16 +64,10 @@ node[:deploy].each do |application, deploy|
     config_directory = "#{deploy[:deploy_to]}/shared/config"
 
     workers.each do |worker, options|
-
       # Convert attribute classes to plain old ruby objects
       config = options[:config] ? options[:config].to_hash : {}
       config.each do |k, v|
-        case v
-        when Chef::Node::ImmutableArray
-          config[k] = v.to_a
-        when Chef::Node::ImmutableMash
-          config[k] = v.to_hash
-        end
+        config[k] = deep_transform_values(v)
       end
 
       # Generate YAML string
