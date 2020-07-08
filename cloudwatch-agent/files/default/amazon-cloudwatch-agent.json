@@ -1,0 +1,8 @@
+{
+  "metrics": {
+    "namespace": "StatsD",
+    "metrics_collected": {
+      "statsd": {}
+    }
+  }
+}
