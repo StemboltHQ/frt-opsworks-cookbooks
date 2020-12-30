@@ -24,6 +24,6 @@ remote_file "#{Chef::Config[:file_cache_path]}/postgresql11-devel.rpm" do
   source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql11-devel-11.9-1PGDG.rhel6.x86_64.rpm"
 end
 
-rpm_package "postgresql11" do
+rpm_package "postgresql11-devel" do
   source "#{Chef::Config[:file_cache_path]}/postgresql11-devel.rpm"
 end
