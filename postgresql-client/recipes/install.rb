@@ -33,11 +33,3 @@ rpm_package "postgresql11-custom" do
   source "#{Chef::Config[:file_cache_path]}/postgresql11-devel.rpm"
   action :install
 end
-
-yum_package 'postgresql11' do
-  action :install
-end
-
-yum_package 'postgresql11-devel' do
-  action :install
-end
