@@ -1,10 +1,10 @@
 remote_file '/opt/amazon-cloudwatch-agent.rpm' do
   source 'https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm'
+  action :create_if_missing
 end
 
 rpm_package 'amazon-cloudwatch-agent.rpm' do
   source '/opt/amazon-cloudwatch-agent.rpm'
-  action :install
 end
 
 cookbook_file '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent-statsd.json' do
