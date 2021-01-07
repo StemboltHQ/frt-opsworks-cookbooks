@@ -5,6 +5,7 @@ end
 
 rpm_package 'amazon-cloudwatch-agent.rpm' do
   source '/opt/amazon-cloudwatch-agent.rpm'
+  not_if "rpm -qa | grep -q 'amazon-cloudwatch-agent'"
 end
 
 cookbook_file '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent-statsd.json' do
