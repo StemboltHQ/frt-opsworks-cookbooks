@@ -1,0 +1,6 @@
+name             'maintenance'
+maintainer       'SDTechDev Dev Team'
+maintainer_email 'dev@sdtechdev.com'
+license          'Proprietary - All Rights Reserved'
+description      'sets maintenance estimated end time and turns on/off maintenance on server'
+version          '0.0.1'
