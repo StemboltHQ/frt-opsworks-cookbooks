@@ -1,17 +1,60 @@
 <% (['development', 'production'] + [@environment]).uniq.each do |env| -%>
 <%= env %>:
-  adapter: <%= @database[:adapter].to_s.inspect %>
   database: <%= @database[:database].to_s.inspect %>
   encoding: <%= (@database[:encoding] || 'utf8').to_s.inspect %>
+  <%- if (@database[:sidekiq_on_replica] || false) -%>
+  adapter: <%= @database[:makara_adapter].to_s.inspect %>
+  makara:
+    <%- if @database[:blacklist_duration] -%>
+    blacklist_duration: <%= @database[:blacklist_duration].to_i.inspect %>
+    <%- end -%>
+    <%- if @database[:master_ttl] -%>
+    master_ttl: <%= @database[:master_ttl].to_i.inspect %>
+    <%- end -%>
+    <%- if @database[:master_strategy] -%>
+    master_strategy: <%= @database[:master_strategy].to_s.inspect %>
+    <%- end -%>
+    sticky: <%= @database[:sticky] ? 'true' : 'false' %>
+    <%- if @database[:slave_strategy] -%>
+    slave_strategy: <%= @database[:slave_strategy].to_s.inspect %>
+    <%- end -%>
+    connections:
+      - role: master
+        host: <%= (@database[:host] || 'localhost').to_s.inspect %>
+        username: <%= @database[:username].to_s.inspect %>
+        password: <%= @database[:password].to_s.inspect %>
+        reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
+        <%- if @database[:pool] -%>
+        pool: <%= @database[:pool].to_i.inspect %>
+        <% end -%>
+        <%- if @database[:port] %>
+        port: <%= @database[:port].to_i.inspect %>
+        <% end -%>
+      <%- @database[:replica_configs].to_a.each do |replica_config| %>
+      - role: replica
+        host: <%= (replica_config[:host] || 'localhost').to_s.inspect %>
+        username: <%= replica_config[:username].to_s.inspect %>
+        password: <%= replica_config[:password].to_s.inspect %>
+        reconnect: <%= replica_config[:reconnect] ? 'true' : 'false' %>
+        <%- if replica_config[:pool] -%>
+        pool: <%= replica_config[:pool].to_i.inspect %>
+        <%- end -%>
+        <%- if replica_config[:port] -%>
+        port: <%= replica_config[:port].to_i.inspect %>
+        <%- end -%>
+      <%- end -%>
+<% else -%>
+  adapter: <%= @database[:adapter].to_s.inspect %>
   host: <%= (@database[:host] || 'localhost').to_s.inspect %>
   username: <%= @database[:username].to_s.inspect %>
   password: <%= @database[:password].to_s.inspect %>
   reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
-<% if @database[:pool] -%>
+  <%- if @database[:pool] -%>
   pool: <%= @database[:pool].to_i.inspect %>
-<% end -%>
-<% if @database[:port] -%>
+  <% end -%>
+  <%- if @database[:port] -%>
   port: <%= @database[:port].to_i.inspect %>
-<% end -%>
+  <% end -%>
+  <% end -%>
 
-<% end %>
+<%- end %>
