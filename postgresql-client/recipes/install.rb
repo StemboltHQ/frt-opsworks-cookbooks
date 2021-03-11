@@ -4,26 +4,26 @@ package 'postgresql' do
 end
 
 # Install Postgres 11 Client
-remote_file "#{Chef::Config[:file_cache_path]}/postgresql11-libs.rpm" do
-  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql11-libs-11.9-1PGDG.rhel6.x86_64.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/postgresql12-libs.rpm" do
+  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql12-libs-12.5-1PGDG.rhel6.x86_64.rpm"
 end
 
-rpm_package "postgresql11-libs" do
-  source "#{Chef::Config[:file_cache_path]}/postgresql11-libs.rpm"
+rpm_package "postgresql12-libs" do
+  source "#{Chef::Config[:file_cache_path]}/postgresql12-libs.rpm"
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/postgresql11.rpm" do
-  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql11-11.9-1PGDG.rhel6.x86_64.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/postgresql12.rpm" do
+  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql12-12.5-1PGDG.rhel6.x86_64.rpm"
 end
 
-rpm_package "postgresql11" do
-  source "#{Chef::Config[:file_cache_path]}/postgresql11.rpm"
+rpm_package "postgresql12" do
+  source "#{Chef::Config[:file_cache_path]}/postgresql12.rpm"
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/postgresql11-devel.rpm" do
-  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql11-devel-11.9-1PGDG.rhel6.x86_64.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/postgresql12-devel.rpm" do
+  source "https://jiffy-linux-packages.s3.amazonaws.com/postgresql12-devel-12.5-1PGDG.rhel6.x86_64.rpm"
 end
 
-rpm_package "postgresql11-devel" do
-  source "#{Chef::Config[:file_cache_path]}/postgresql11-devel.rpm"
+rpm_package "postgresql12-devel" do
+  source "#{Chef::Config[:file_cache_path]}/postgresql12-devel.rpm"
 end
