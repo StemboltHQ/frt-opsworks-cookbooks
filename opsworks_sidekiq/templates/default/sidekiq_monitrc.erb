@@ -1,18 +1,20 @@
 <% @workers.each do |worker, options| %>
-  <% (options[:process_count] || 1).times do |n| %>
-  <% identifier = "#{@application}-#{worker}#{n+1}" %>
-  <% conf_file = "#{@deploy[:deploy_to]}/shared/config/sidekiq_#{worker}#{n+1}.yml" %>
-  <% pid_file = "#{@deploy[:deploy_to]}/shared/pids/sidekiq_#{identifier}.pid" %>
-  <% if @syslog %>
-    <% ident = @syslog_ident ? @syslog_ident : "sidekiq-#{identifier}" %>
-    <% syslog = "2>&1 | logger -t #{ident}" %>
+  <% sidekiq_process_count = options[:process_count] || 1 %>
+  <% identifier = "#{@application}-#{worker}" %>
+  <% memory_limit_mb = options[:memory_limit_mb] || 2048 %>
+  <% sidekiq_timeout = options[:sidekiq_timeout] || 10 %>
+  <% conf_file = "#{@deploy[:deploy_to]}/shared/config/sidekiq_#{worker}.yml" %>
+  <% log_file = options[:config][:logfile] %>
+  <% ident = @opts[:syslog_ident] ? @opts[:syslog_ident] : "sidekiq-#{identifier}" %>
+  <% logger = '' %>
+  <% if log_file %>
+    <% logger = "2>&1 >> #{log_file}" %>
+  <% elsif !!@opts[:syslog] %>
+    <% logger = "2>&1 | logger -t #{ident}" %>
   <% end %>
 
-check process sidekiq_<%= identifier %>
-  with pidfile <%= pid_file %>
-  start program = "/bin/su - <%= @deploy[:user] %> -c 'cd <%= @deploy[:current_path] %> && RAILS_ENV=<%= @deploy[:rails_env] %> bundle exec sidekiq -C <%= conf_file %> -P  <%= pid_file %> <%= syslog %>'" with timeout 90 seconds
-  stop  program = "/bin/su - <%= @deploy[:user] %> -c 'kill -s TERM `cat <%= pid_file %>`'" with timeout 90 seconds
+check process sidekiq_<%= identifier %> matching "bundle exec sidekiq.*/sidekiq_<%= worker %>.yml"
+  start program = "/bin/su - <%= @deploy[:user] %> -c 'cd <%= @deploy[:current_path] %> && RAILS_ENV=<%= @deploy[:rails_env] %> SIDEKIQ_PRELOAD= SIDEKIQ_MAXMEM_MB=<%= memory_limit_mb %> SIDEKIQ_COUNT=<%= sidekiq_process_count %> bundle exec sidekiqswarm -C <%= conf_file %> -t <%= sidekiq_timeout %> -r <%= @deploy[:current_path] %> <%= logger %>'" with timeout 90 seconds
+  stop program = "/bin/su - <%= @deploy[:user] %> -c 'ps ax | grep sidekiq_<%= worker %>.yml | grep -v grep | awk "{printf \"%s%s\",sep,\$1; sep=\",\"} END{print \"\"}" | xargs -r pgrep -P | xargs -r kill'" with timeout 90 seconds
   group sidekiq_<%= @application %>_group
-
-  <% end %>
 <% end %>
