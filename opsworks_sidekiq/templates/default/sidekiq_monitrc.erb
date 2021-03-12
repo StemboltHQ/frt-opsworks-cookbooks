@@ -2,7 +2,7 @@
   <% sidekiq_process_count = options[:process_count] || 1 %>
   <% identifier = "#{@application}-#{worker}" %>
   <% memory_limit_mb = options[:memory_limit_mb] || 2048 %>
-  <% sidekiq_timeout = options[:sidekiq_timeout] || 10 %>
+  <% sidekiq_timeout = options[:sidekiq_timeout] || 30 %>
   <% conf_file = "#{@deploy[:deploy_to]}/shared/config/sidekiq_#{worker}.yml" %>
   <% log_file = options[:config][:logfile] %>
   <% ident = @opts[:syslog_ident] ? @opts[:syslog_ident] : "sidekiq-#{identifier}" %>
