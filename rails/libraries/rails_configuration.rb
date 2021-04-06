@@ -38,7 +38,7 @@ module OpsWorks
       if File.exists?("#{app_root_path}/Gemfile")
         Chef::Log.info("Gemfile detected. Running bundle install.")
         Chef::Log.info("sudo su - #{app_config[:user]} -c 'cd #{app_root_path} && /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --deployment --without=#{app_config[:ignore_bundler_groups].join(' ')}'")
-        Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su - #{app_config[:user]} -c 'cd #{app_root_path} && BUNDLE_BUILD__PG='--with-pg-config=/usr/pgsql-11/bin/pg_config' /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --deployment --without=#{app_config[:ignore_bundler_groups].join(' ')}' 2>&1"))
+        Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su - #{app_config[:user]} -c 'cd #{app_root_path} && BUNDLE_BUILD__PG='--with-pg-config=/usr/pgsql-12/bin/pg_config' /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --deployment --without=#{app_config[:ignore_bundler_groups].join(' ')}' 2>&1"))
       end
     end
   end
