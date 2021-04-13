@@ -13,7 +13,7 @@
   <% end %>
 
 check process sidekiq_<%= identifier %> matching "bundle exec sidekiq.*/sidekiq_<%= worker %>.yml"
-  start program = "/bin/su - <%= @deploy[:user] %> -c 'cd <%= @deploy[:current_path] %> && RAILS_ENV=<%= @deploy[:rails_env] %> SIDEKIQ_PRELOAD= SIDEKIQ_COUNT=<%= sidekiq_process_count %> bundle exec sidekiqswarm -C <%= conf_file %> -t <%= sidekiq_timeout %> -r <%= @deploy[:current_path] %> <%= logger %>'" with timeout 90 seconds
+  start program = "/bin/su - <%= @deploy[:user] %> -c 'cd <%= @deploy[:current_path] %> && RAILS_ENV=<%= @deploy[:rails_env] %> SIDEKIQ_PRELOAD= SIDEKIQ_COUNT=<%= sidekiq_process_count %> MALLOC_ARENA_MAX=2 bundle exec sidekiqswarm -C <%= conf_file %> -t <%= sidekiq_timeout %> -r <%= @deploy[:current_path] %> <%= logger %>'" with timeout 90 seconds
   stop program = "/bin/su - <%= @deploy[:user] %> -c 'ps ax | grep sidekiq_<%= worker %>.yml | grep -v grep | awk "{printf \"%s%s\",sep,\$1; sep=\",\"} END{print \"\"}" | xargs -r pgrep -P | xargs -r kill'" with timeout 90 seconds
   group sidekiq_<%= @application %>_group
 <% end %>
