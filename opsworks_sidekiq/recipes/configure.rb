@@ -23,6 +23,7 @@ node[:deploy].each do |application, deploy|
       environment: deploy[:rails_env]
     )
 
+    # TODO: shem, try this
     notifies :run, "execute[restart Sidekiq app #{application}]"
 
     only_if do
@@ -41,6 +42,7 @@ node[:deploy].each do |application, deploy|
       environment: deploy[:rails_env]
     )
 
+    # TODO: shem, try this
     notifies :run, "execute[restart Sidekiq app #{application}]"
 
     only_if do
